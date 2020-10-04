@@ -1,4 +1,7 @@
 from collections import defaultdict
+from gensim import corpora
+from gensim import models
+from gensim import similarities
 import pprint
 document = "Human machine interface for lab abc computer applications"
 text_corpus = [
@@ -29,3 +32,23 @@ for text in texts:
 processed_corpus = [
     [token for token in text if frequency[token] > 1] for text in texts]
 pprint.pprint(processed_corpus)
+
+dictionary = corpora.Dictionary(processed_corpus)
+print(dictionary)
+
+pprint.pprint(dictionary.token2id)
+
+bow_corpus = [dictionary.doc2bow(text) for text in processed_corpus]
+pprint.pprint(bow_corpus)
+
+# train the model
+tfidf = models.TfidfModel(bow_corpus)
+
+# transform the system minors string
+words = "system minors".lower().split()
+print(tfidf[dictionary.doc2bow(words)])
+index = similarities.SparseMatrixSimilarity(tfidf[bow_corpus], num_features=12)
+query_document = 'system engineering'.split()
+query_bow = dictionary.doc2bow(query_document)
+sims = index[tfidf[query_bow]]
+print(list(enumerate(sims)))
