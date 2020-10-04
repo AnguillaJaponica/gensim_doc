@@ -37,5 +37,17 @@ texts = [
 pprint(texts)
 
 dictionary = corpora.Dictionary(texts)
-dictionary.save('./deerwester.dict')  # store the dictionary, for future reference
+# store the dictionary, for future reference
+dictionary.save('./deerwester.dict')
 print(dictionary)
+
+new_doc = "Human computer interaction"
+new_vec = dictionary.doc2bow(new_doc.lower().split())
+# the word "interaction" does not appear in the dictionary and is ignored
+print(new_vec)
+
+corpus = [dictionary.doc2bow(text) for text in texts]
+corpora.MmCorpus.serialize(
+    './deerwester.mm',
+    corpus)  # store to disk, for later use
+print(corpus)
