@@ -48,6 +48,6 @@ print(new_vec)
 
 corpus = [dictionary.doc2bow(text) for text in texts]
 corpora.MmCorpus.serialize(
-    './deerwester.mm',
+    'deerwester.mm',
     corpus)  # store to disk, for later use
 print(corpus)
